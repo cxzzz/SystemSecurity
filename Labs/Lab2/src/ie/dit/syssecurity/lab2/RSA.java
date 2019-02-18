@@ -37,11 +37,36 @@ public class RSA {
 		return result;
 	}
 	
+	public static BigInteger encryptMessage(String message, BigInteger key, BigInteger modulo) {
+		
+		// Convert the message to bytes
+		byte[] bytes = message.getBytes();
+		
+		// Generate the message in BigInteger
+		BigInteger newMessage = new BigInteger(bytes);
+		
+		// Compute and return the message in encrypted status
+		return newMessage.pow(key.intValue()).mod(modulo);
+	}
+	
+	public static byte[] decryptMessage(BigInteger message, BigInteger key, BigInteger modulo) {
+		
+		// Decrypt using secret key
+		BigInteger newMessage = message.pow(key.intValue()).mod(modulo);
+		
+		// Convert it back to bytes
+		byte[] bytes = newMessage.toByteArray();
+		
+		// Convert the bytes into String and return
+		return bytes;
+	}
+	
 	public static void main(String args[]) {
 		// Generate two larget random numbers
 		BigInteger num1 = BigInteger.probablePrime(512, new Random());
 		BigInteger num2 = num1.nextProbablePrime(); // Because might generated same prime number for 2 nums.
 		
+		String message = "SystemSecurityWithRSAALgorithmEncryption";
 		
 		// Test the number generated is prime number
 		if (num1.isProbablePrime(100) && num1.isProbablePrime(100)) {
@@ -54,6 +79,17 @@ public class RSA {
 			System.out.println("The public key is: " + keys[0]);
 			System.out.println("The private key is: " + keys[1]);
 			System.out.println("PQ is: " + keys[2]);
+			
+			// Encrypt a message
+			BigInteger encryptedMessage = encryptMessage(message, keys[0], keys[2]); 
+			
+			// Output the encryptedMessage to screen
+			System.out.println("Encrypted BigInteger: " + encryptedMessage);
+			
+			// Decrypt the encrypted message
+			String decryptedMessage = new String(decryptMessage(encryptedMessage, keys[1], keys[2]));
+			
+			System.out.println("Message is: " + decryptedMessage);
 			
 			
 		} else {
