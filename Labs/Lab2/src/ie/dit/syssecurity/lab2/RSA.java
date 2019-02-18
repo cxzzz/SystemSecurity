@@ -89,6 +89,7 @@ public class RSA {
 			// Decrypt the encrypted message
 			String decryptedMessage = new String(decryptMessage(encryptedMessage, keys[1], keys[2]));
 			
+			// Output to screen
 			System.out.println("Message is: " + decryptedMessage);
 			
 			
