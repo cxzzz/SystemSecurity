@@ -22,11 +22,16 @@ public class RSA {
 		// Calculate result of P and Q
 		BigInteger pq = num1.multiply(num2);
 		// Calculate o(n) = (p-1) (q-1)
-		BigInteger fi = num1.subtract(BigInteger.ONE).multiply(num2.subtract(BigInteger.ONE));
+		BigInteger phi = num1.subtract(BigInteger.ONE).multiply(num2.subtract(BigInteger.ONE));
 		// Find mod inverse of fi
-		BigInteger e = fi.gcd(BigInteger.valueOf(3));
-		// Find another mod inverse of fi
-		BigInteger d = fi.gcd(BigInteger.valueOf(65537));
+		
+		BigInteger e = BigInteger.probablePrime(512, new Random());
+		
+		while(!phi.gcd(e).equals(BigInteger.ONE)) {
+			e.nextProbablePrime();
+		}
+		// Find another mod inverse of phi
+		BigInteger d = e.modInverse(phi);
 		
 		// index 0 - public key, index 1 - private key, index 2 - PQ
 		result[0] = e;
@@ -46,13 +51,13 @@ public class RSA {
 		BigInteger newMessage = new BigInteger(bytes);
 		
 		// Compute and return the message in encrypted status
-		return newMessage.pow(key.intValue()).mod(modulo);
+		return newMessage.modPow(key, modulo);
 	}
 	
 	public static byte[] decryptMessage(BigInteger message, BigInteger key, BigInteger modulo) {
 		
 		// Decrypt using secret key
-		BigInteger newMessage = message.pow(key.intValue()).mod(modulo);
+		BigInteger newMessage = message.modPow(key, modulo);
 		
 		// Convert it back to bytes
 		byte[] bytes = newMessage.toByteArray();
@@ -66,7 +71,7 @@ public class RSA {
 		BigInteger num1 = BigInteger.probablePrime(512, new Random());
 		BigInteger num2 = num1.nextProbablePrime(); // Because might generated same prime number for 2 nums.
 		
-		String message = "SystemSecurityWithRSAALgorithmEncryption";
+		String message = "System Security With RSA Algorithm";
 		
 		// Test the number generated is prime number
 		if (num1.isProbablePrime(100) && num1.isProbablePrime(100)) {
