@@ -69,13 +69,15 @@ public class RSA {
 	public static void main(String args[]) {
 		// Generate two larget random numbers
 		BigInteger num1 = BigInteger.probablePrime(512, new Random());
-		BigInteger num2 = num1.nextProbablePrime(); // Because might generated same prime number for 2 nums.
+		BigInteger num2 = BigInteger.probablePrime(512, new Random()); // Because might generated same prime number for 2 nums.
 		
 		String message = "System Security With RSA Algorithm";
 		
 		// Test the number generated is prime number
-		if (num1.isProbablePrime(100) && num1.isProbablePrime(100)) {
+		if (num1.isProbablePrime(100) && num2.isProbablePrime(100) && num1 != num2) {
 			System.out.println("Numbers are all prime");
+			System.out.println("Num1: " + num1);
+			System.out.println("Num2: " + num2);
 
 			// Generating the public key and private key
 			BigInteger[] keys = generateKey(num1, num2);
