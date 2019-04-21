@@ -27,7 +27,7 @@ public class RSA {
 		
 		BigInteger e = BigInteger.probablePrime(512, new Random());
 		
-		while(!phi.gcd(e).equals(BigInteger.ONE)) {
+		while(!phi.gcd(e).equals(BigInteger.ONE) || e.intValue() < phi.intValue()) {
 			e.nextProbablePrime();
 		}
 		// Find another mod inverse of phi
